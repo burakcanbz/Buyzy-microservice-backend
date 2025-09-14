@@ -4,12 +4,16 @@ import { connectDB } from './config/db';
 const PORT = process.env.PORT || 3000;
 
 import { connectRabbitMQ } from './messaging/rabbitmq';
-import { startOrderConsumer } from './messaging/consumer';
+import { orderCanceledConsumer, orderCreatedConsumer, orderUpdatedConsumer, orderItemAddedConsumer, orderDeletedConsumer } from './messaging/consumer';
 
 (async () => {
   await connectRabbitMQ();
 
-  await startOrderConsumer();
+  await orderCreatedConsumer();
+  await orderUpdatedConsumer();
+  await orderCanceledConsumer();
+  await orderItemAddedConsumer();
+  await orderDeletedConsumer();
 })();
 
 connectDB().then(() => {

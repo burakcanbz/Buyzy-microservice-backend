@@ -234,3 +234,6 @@ NameError: name 'email' is not defined. Did you mean: 'eval'? Or did you forget 
 2025-09-12 16:40:24 | DEBUG | user-service | UserService initialized
 2025-09-12 16:40:24 | INFO | user-service | User created: denis@gmail.com with role: user.
 2025-09-12 16:40:24 | INFO | user-service | POST /user - User registered event published to user.registered queue.
+2025-09-14 19:39:53 | INFO | user-service | GET /login - Login request
+2025-09-14 19:39:53 | DEBUG | user-service | UserService initialized
+2025-09-14 19:39:53 | INFO | user-service | GET /login - Login successfull with email='burak@gmail.com'

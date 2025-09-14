@@ -28,6 +28,8 @@ public class RabbitConfig {
     @Bean
     public Queue orderUpdatedQueue() { return new Queue(RabbitQueue.ORDER_UPDATED.getQueueName(), true); }
     @Bean
+    public Queue orderItemAddedQueue() { return new Queue(RabbitQueue.ORDER_ITEM_ADDED.getQueueName(), true); }
+    @Bean
     public Queue orderCanceledQueue() { return new Queue(RabbitQueue.ORDER_CANCELED.getQueueName(), true); }
     @Bean
     public Queue orderDeletedQueue() { return new Queue(RabbitQueue.ORDER_DELETED.getQueueName(), true); }
@@ -40,6 +42,10 @@ public class RabbitConfig {
     @Bean
     public Binding orderUpdatedinding(Queue orderUpdatedQueue, TopicExchange topicExchange) {
         return BindingBuilder.bind(orderUpdatedQueue).to(topicExchange).with(RabbitQueue.ORDER_UPDATED.getRoutingKey());
+    }
+    @Bean
+    public Binding orderItemAddedBinding(Queue orderItemAddedQueue, TopicExchange topicExchange){
+        return BindingBuilder.bind(orderItemAddedQueue).to(topicExchange).with(RabbitQueue.ORDER_ITEM_ADDED.getRoutingKey());
     }
     @Bean
     public Binding orderCanceledBinding(Queue orderCanceledQueue, TopicExchange topicExchange) {
@@ -63,7 +69,6 @@ public class RabbitConfig {
         factory.setUsername("guest");
         factory.setPassword("guest");
 
-        // enable publisher confirms and returns
         factory.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.CORRELATED);
         factory.setPublisherReturns(true);
 

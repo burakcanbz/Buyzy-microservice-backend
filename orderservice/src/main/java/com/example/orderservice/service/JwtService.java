@@ -14,7 +14,7 @@ import java.security.Key;
 @Service
 public class JwtService {
 
-    private final String secretKey = "supersecret_supersecretkey12345678"; // 32+ chars
+    private final String secretKey = "supersecret_supersecretkey12345678";  // should be +32 chars
 
     public Claims verifyToken(String token) {
         try {
@@ -27,7 +27,7 @@ public class JwtService {
                     .parseClaimsJws(token)
                     .getBody();
             System.out.println("Token is valid: " + claims);
-            return claims;  // <-- RETURN Claims, not String
+            return claims;
         } catch (Exception e) {
             throw new RuntimeException("Token verification failed", e);
         }

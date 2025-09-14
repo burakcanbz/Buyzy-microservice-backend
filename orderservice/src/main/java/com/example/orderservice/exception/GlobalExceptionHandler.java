@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@ControllerAdvice  //Global Exception
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
     @Autowired

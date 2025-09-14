@@ -11,7 +11,6 @@ const paginationSchema = z.object({
 export const getAllProducts = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { page, limit } = paginationSchema.parse(req.query);
-
         logger.info('GET /products in all products - Request received');
         const products = await productService.
         getAllProducts(page, limit);

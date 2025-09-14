@@ -2,6 +2,7 @@ package com.example.orderservice.configuration;
 
 public enum RabbitQueue{
     ORDER_CREATED("order.craeted.queue", "order.created"),
+    ORDER_ITEM_ADDED("orderItem.added.queue", "orderItem.added"),
     ORDER_UPDATED("order.updated.queue", "order.updated"),
     ORDER_CANCELED("oreder.canceled.queue", "order.canceled"),
     ORDER_DELETED("order.deleted.queue", "order.deleted");

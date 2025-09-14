@@ -5,6 +5,7 @@ import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.orderservice.logger.LoggerService;
 import com.example.orderservice.configuration.RabbitConfig;
+import com.example.orderservice.model.OrderItem;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -39,6 +40,16 @@ public class OrderPublisher {
         }
     }
 
+    public void publishOrderItemAdded(String orderItem){
+        try {
+            rabbitTemplate.convertAndSend("amq.topic", "orderItem.added", orderItem);
+            logger.info("✅ Sent orderItem.added event: " + orderItem);
+        }
+        catch (Exception e) {
+            logger.error("Failed to send orderItem.added event: ", e);
+        }
+    }
+
     public void publishOrderCanceled(String orderData) {
         try{
             rabbitTemplate.convertAndSend("amq.topic", "order.canceled", orderData);
@@ -58,5 +69,7 @@ public class OrderPublisher {
             logger.error("Failed to sent order.deleted event: ", e);
         }
     }
+
+
 
 }

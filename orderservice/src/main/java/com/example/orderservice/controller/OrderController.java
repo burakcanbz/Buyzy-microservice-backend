@@ -16,17 +16,16 @@ import io.jsonwebtoken.Claims;
 import java.util.List;
 import java.util.Optional;
 
-@RestController // Bu sınıf REST endpointleri sunuyor
-@RequestMapping("/orders") // Tüm endpointler /api/orders base path altında
+@RestController
+@RequestMapping("/orders")
 public class OrderController {
 
     @Autowired
     private JwtService jwtService;
 
-    @Autowired // DI ile service inject ediyoruz
+    @Autowired
     private OrderService orderService;
 
-    // 1. Belirli bir kullanıcıya ait tüm siparişleri getir
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Order>> getOrdersByUserId(@RequestHeader("Authorization") String authHeader, @PathVariable String userId) {
         String token = authHeader.replace("Bearer ", "");
@@ -38,7 +37,6 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
-    // 2. Tüm siparişleri sayfalama (pagination) ile getir
     @GetMapping
     public ResponseEntity<Page<Order>> getAllOrders(@RequestHeader("Authorization") String authHeader,
             @RequestParam(defaultValue = "0") int page,
@@ -53,7 +51,6 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
-    // 3. Belirli bir siparişin status'ünü order ID ile getir
     @GetMapping("/status/{orderId}")
     public ResponseEntity<Order> getOrderStatusByOrderId(@RequestHeader("Authorization") String authHeader, @PathVariable Long orderId) {
         String token = authHeader.replace("Bearer ", "");
@@ -80,7 +77,6 @@ public class OrderController {
         return ResponseEntity.ok(optionalOrder.get());
     }
 
-    // 4. Yeni bir sipariş oluştur
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestHeader("Authorization") String authHeader, @RequestBody Order order) {
         for (OrderItem item : order.getItems()) {
@@ -94,7 +90,6 @@ public class OrderController {
         return ResponseEntity.ok(createdOrder);
     }
 
-    // 5. Mevcut bir siparişi iptal et
     @PatchMapping("/{orderId}/cancel")
     public ResponseEntity<Order> cancelOrder(@RequestHeader("Authorization") String authHeader, @PathVariable Long orderId) {
         String token = authHeader.replace("Bearer ", "");
@@ -107,8 +102,20 @@ public class OrderController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/{orderId}")
+    public ResponseEntity<Order> updateOrder(@RequestHeader("Authorization") String authHeader, @PathVariable Long orderId, @RequestBody Order updatedOrder) {
+        String token = authHeader.replace("Bearer ", "");
+        Claims claims = jwtService.verifyToken(token);
+        if(claims == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Optional<Order> optionalOrder = orderService.updateOrder(orderId, updatedOrder.getItems());
+        return optionalOrder.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @PatchMapping("/addProduct/{orderId}")
-    public ResponseEntity<Order> addOrderItemToOrder(@RequestHeader("Authorization") String authHeader, @PathVariable Long orderId, @RequestBody OrderItem newItem) {
+    public ResponseEntity<Order> addItemToOrder(@RequestHeader("Authorization") String authHeader, @PathVariable Long orderId, @RequestBody OrderItem newItem) {
         String token = authHeader.replace("Bearer ", "");
         Claims claims = jwtService.verifyToken(token);
         if (claims == null){

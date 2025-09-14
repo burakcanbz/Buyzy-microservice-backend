@@ -5,19 +5,16 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// Order tablosunu temsil eden ana entity
 @Entity
-@Table(name = "\"order\"") // çift tırnak ile PostgreSQL keyword kaçırılır
+@Table(name = "\"order\"")
 public class Order {
 
-    // Primary key olarak kullanılacak id kolonunu tanımlıyoruz
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userId; // kullanıcı alanı
+    private String userId;
 
-    // Sipariş durumu için enum
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
@@ -29,10 +26,9 @@ public class Order {
     @JsonManagedReference
     private List<OrderItem> items = new ArrayList<>(); // boş liste ile başlatıyoruz, null gelmesin
 
-    // Default constructor
     public Order() {}
 
-    // Getter ve Setter
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -45,16 +41,14 @@ public class Order {
     public List<OrderItem> getItems() { return items; }
     public void setItems(List<OrderItem> items) { this.items = items; }
 
-    // Kolay kullanım için item ekleme metodu
     public void addItem(OrderItem item) {
         items.add(item);
-        item.setOrder(this); // ilişkiyi iki yönlü güncelle
+        item.setOrder(this);
     }
 
-    // Kolay kullanım için item çıkarma metodu
     public void removeItem(OrderItem item) {
         items.remove(item);
-        item.setOrder(null); // ilişkiyi kaldır
+        item.setOrder(null);
     }
 }
 

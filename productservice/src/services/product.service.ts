@@ -12,7 +12,7 @@ export const createProduct = async (data: Product): Promise<HydratedDocument<Pro
 
 export const createManyProducts = async (data: Product[]): Promise<HydratedDocument<Product>[]> => await ProductModel.insertMany(data);
 
-export const updateProduct = async (id: string, data: Partial<HydratedDocument<Product>>): Promise<Product | null> => 
+export const updateProduct = async (id: string, data: Partial<HydratedDocument<Product>>): Promise<HydratedDocument<Product> | null> => 
   await ProductModel.findByIdAndUpdate(id, data, { new: true, runValidators: true });
 
 export const replaceProduct = async (id: string, data: Product): Promise<HydratedDocument<Product> | null> => 
